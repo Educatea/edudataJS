@@ -99,7 +99,7 @@ function ed(options) {
 	}
 };
 
-// This is a listener for A/B testing.
+// This is a tracker listener.
 // This will listen to every click made to a button or link.
 // You can add other HTML tags as well.
 // The tags need to have the following attributes:
@@ -107,7 +107,7 @@ function ed(options) {
 // data-track-tag="TAG-NAME"
 // data-track-value="INTEGER"
 
-$('button, a').on('click', function(){
+$('button, a').on('click', function(){ 
 	// We'll see if the tracking is on.
 	track = $(this).attr('data-track');
   
@@ -164,4 +164,39 @@ $('button, a').on('click', function(){
 		});
 	}
   
+});
+
+// Make an array unique.
+Array.prototype.unique = function(){
+    var tmp = {}, out = [];
+    for(var i = 0, n = this.length; i < n; ++i){
+        if(!tmp[this[i]]) { tmp[this[i]] = true; out.push(this[i]); }
+    }
+    return out;
+}
+
+// Code to run some A/B Tests.
+// To run this just add a normal tracker to the element
+// And a 'data-ab-test' attribute with the name of the test.
+// Remeber to use the same name for tested elemnts and only with 2 elements.
+
+// Let's create an array to contain all the tests.
+ab_tests = [];
+
+// Now let's find those tests.
+$('[data-ab-test]').each(function() {
+	// Push 'em into the array.
+	ab_tests.push($(this).attr('data-ab-test'));
+});
+
+// Delete repeated with our .unique() helper.
+ab_tests = ab_tests.unique();
+
+// Now we'll iterate the tests.
+$.each( ab_tests, function( index, value ){
+	// We need to make sure there are only 2 elements being tested.
+	if($("[data-ab-test='"+value+"']").length == 2){
+		// And hide a random one of the two.
+		$("[data-ab-test='"+value+"']:eq("+(Math.floor((Math.random() * 2) + 1) -1)+")").hide();
+	}
 });
