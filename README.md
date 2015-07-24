@@ -6,9 +6,6 @@ JavaScript function to send data to [EduData](http://data.educatea.com.ar).
 First add jQuery      
 ```<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>```
 
-Then add [JavaScript Cookie](https://github.com/js-cookie/js-cookie)      
-```<script src="js.cookie.js"></script>```
-
 Now add edudata.js     
 ```<script src="edudata.js"></script>```
 
