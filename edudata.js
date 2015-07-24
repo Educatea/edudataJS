@@ -1,6 +1,6 @@
 /*!
  * EduDataJS v0.0.1
- * https://github.com/juangesino/edudata
+ * https://github.com/Educatea/edudataJS
  *
  * Copyright 2015, Educación Digital Adaptativa S.A.
  * Released under the MIT license
@@ -16,23 +16,26 @@ function ed(options) {
 
     case 'start':
 
-        // ed({ action: "track", token: "TOKEN", host: "HOST-NAME"});
+        // ed({ action: "start", token: "TOKEN", host: "HOST-NAME"});
 
-        // Require cookie.js
-        $.getScript("js.cookie.js", function(){
-        	// Set the token as cookie.
-   			Cookies.set('edutoken', options.token, { path: '' });
+        // Set the token as cookie.
+        localStorage.setItem("edutoken", options.token);
 
-   			// Set the host as cookie.
-   			Cookies.set('host', options.host, { path: '' });
+		// Set the host as cookie.
+		localStorage.setItem("host", options.host);
 
-   			return true;
-		});
+		return true;
+
         break;
 
     case 'track':
     	
     	// ed({ action: "track", tag: "TAG-NAME", values: [ARRAY-OF-VALUES], unit: "UNIT" });
+
+    	// Let's get all the variables from options.
+    	tag = options.tag;
+    	unit = options.unit;
+    	values = options.values;
 
 		// Check if there is a tag. If there's no tag send an error.
 		if (typeof tag == 'undefined' || tag == '') {
@@ -58,8 +61,8 @@ function ed(options) {
 		}
 
 		// Get the Token and Host from Cookies.
-		token = Cookies.get('edutoken');
-		host = Cookies.get('host');
+		token = localStorage.getItem("edutoken");
+		host = localStorage.getItem("host");
 
 		// Check if there is a token. If there's no token send an error.
 		if (typeof token == 'undefined' || token == '') {
@@ -73,21 +76,21 @@ function ed(options) {
 		}
 
 		// Finally let's make the call.
-		var url = "http://data.edudata.com.ar/api/v1/measurements"; // EduData endpoint.
+		var url = "http://data.educatea.com.ar/api/v1/measurements"; // EduData endpoint.
 		$.ajax({
-		dataType: "json",
-		data: { token: token, tag: tag, values: values, unit: unit, host: host },
-		type: "POST",
-		url: url,
-		success: function(data) {
-		  return true;
-		},
-		error: function(e) {
-		  return false;
-		},
-		timeout: function() {
-		  return false;
-		}
+			dataType: "json",
+			data: { token: token, tag: tag, values: values, unit: unit, host: host },
+			type: "POST",
+			url: url,
+			success: function(data) {
+			  return true;
+			},
+			error: function(e) {
+			  return false;
+			},
+			timeout: function() {
+			  return false;
+			}
 		});
         break;
 
@@ -117,8 +120,8 @@ $('button, a').on('click', function(){
 		unit =  $(this).attr('data-track-unit');
 
 		// Get the Token and Host from Cookies.
-		token = Cookies.get('edutoken');
-		host = Cookies.get('host');
+		token = localStorage.getItem("edutoken");
+		host = localStorage.getItem("host");
 
 
 		// Let's validate so we don't get any errors.
@@ -143,10 +146,10 @@ $('button, a').on('click', function(){
 		}
 
 		// Now we will send the data
-		var url = "http://data.edudata.com.ar/api/v1/measurements"; // EduData endpoint.
+		var url = "http://data.educatea.com.ar/api/v1/measurements"; // EduData endpoint.
 		$.ajax({
 			dataType: "json",
-			data: { token: token, tag: tag, values: values, unit: unit, host: host },
+			data: { token: token, tag: tag, values: value, unit: unit, host: host },
 			type: "POST",
 			url: url,
 			success: function(data) {
